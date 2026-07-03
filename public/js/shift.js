@@ -37,12 +37,10 @@ function setup() {
   } else {
     // Restore references to the existing persisted canvases
     canvas = {
-      a: document.createElement('canvas'),
-      b: existingCanvas
+      a: existingCanvas
     };
     ctx = {
-      a: canvas.a.getContext('2d'),
-      b: canvas.b.getContext('2d')
+      a: canvas.a.getContext('2d')
     };
   }
 
@@ -137,20 +135,20 @@ function checkBounds(x, y, radius) {
 function createCanvas() {
   container = document.querySelector('.content--canvas');
 	canvas = {
-		a: document.createElement('canvas'),
-		b: document.createElement('canvas')
+		a: document.createElement('canvas')
 	};
-	canvas.b.style = `
+	canvas.a.style = `
 		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
+		filter: blur(50px);
+    background-color: ${backgroundColor};
 	`;
-	container.appendChild(canvas.b);
+	container.appendChild(canvas.a);
 	ctx = {
-		a: canvas.a.getContext('2d'),
-		b: canvas.b.getContext('2d')
+		a: canvas.a.getContext('2d')
 	};
 }
 
@@ -159,28 +157,15 @@ function resize() {
 	
 	canvas.a.width = innerWidth;
   canvas.a.height = innerHeight;
-
-  ctx.a.drawImage(canvas.b, 0, 0);
-
-	canvas.b.width = innerWidth;
-  canvas.b.height = innerHeight;
-  
-  ctx.b.drawImage(canvas.a, 0, 0);
 }
 
 function render() {
-  ctx.b.save();
-  ctx.b.filter = 'blur(50px)';
-  ctx.b.drawImage(canvas.a, 0, 0);
-  ctx.b.restore();
+  // Render logic removed, using CSS blur directly on canvas a
 }
 
 function draw() {
   ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height);
-  ctx.b.fillStyle = backgroundColor;
-  ctx.b.fillRect(0, 0, canvas.b.width, canvas.b.height);
   updateCircles();
-  render();
 	animationId = window.requestAnimationFrame(draw);
 }
 
