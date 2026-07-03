@@ -25,7 +25,7 @@ let baseHue;
 let animationId;
 
 function setup() {
-  if (animationId) window.cancelAnimationFrame(animationId);
+  if (window.shiftAnimationId) window.cancelAnimationFrame(window.shiftAnimationId);
 
   container = document.querySelector('.content--canvas');
 
@@ -166,9 +166,11 @@ function render() {
 function draw() {
   ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height);
   updateCircles();
-	animationId = window.requestAnimationFrame(draw);
+	window.shiftAnimationId = window.requestAnimationFrame(draw);
 }
 
-// Re-run setup on every page navigation — the canvas is reused if persisted
-document.addEventListener('astro:page-load', setup);
-window.addEventListener('resize', resize);
+if (!window.__SHIFT_INITIALIZED) {
+  window.__SHIFT_INITIALIZED = true;
+  document.addEventListener('astro:page-load', setup);
+  window.addEventListener('resize', resize);
+}
